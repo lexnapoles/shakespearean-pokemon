@@ -20,4 +20,8 @@ export default {
     jest: true,
     es2020: true,
   },
+  rules: {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+  },
 };
