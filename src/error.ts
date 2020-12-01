@@ -1,4 +1,4 @@
-export type Error = NotFoundError
+export type ApiError = NotFoundError
 
 export type NotFoundError = {
   type: 'NotFoundError'
@@ -12,6 +12,6 @@ export function notFoundError(message: string): NotFoundError {
   }
 }
 
-export function isNotFound(error: Error): error is NotFoundError {
+export function isNotFound(error: ApiError): error is NotFoundError {
   return error.type === 'NotFoundError'
 }
