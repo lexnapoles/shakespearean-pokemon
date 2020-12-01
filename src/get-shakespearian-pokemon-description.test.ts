@@ -1,5 +1,5 @@
 import { lefts } from 'fp-ts/lib/Array'
-import { right, fold } from 'fp-ts/lib/Either'
+import { right } from 'fp-ts/lib/Either'
 import { none, some } from 'fp-ts/lib/Option'
 import { notFoundError } from './error'
 import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
