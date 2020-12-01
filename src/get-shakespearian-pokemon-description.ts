@@ -1,10 +1,11 @@
 import { Either, fromOption } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/function'
+import { notFoundError, NotFoundError } from './error'
 import { GetPokemonSpeciesByName, PokemonSpecies } from './pokemon-species'
 
 type GetShakespearianPokemonDescription = (
   getPokemonSpeciesByName: GetPokemonSpeciesByName
-) => (pokemonName: string) => Promise<Either<string, PokemonSpecies>>
+) => (pokemonName: string) => Promise<Either<NotFoundError, PokemonSpecies>>
 
 export const getShakespearianPokemonDescription: GetShakespearianPokemonDescription = (
   getPokemonSpeciesByName
@@ -13,6 +14,6 @@ export const getShakespearianPokemonDescription: GetShakespearianPokemonDescript
 
   return pipe(
     pokemonSpecies,
-    fromOption(() => 'No pokemon found')
+    fromOption(() => notFoundError('No pokemon found'))
   )
 }

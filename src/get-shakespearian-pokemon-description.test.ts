@@ -1,6 +1,7 @@
 import { lefts } from 'fp-ts/lib/Array'
 import { right, fold } from 'fp-ts/lib/Either'
 import { none, some } from 'fp-ts/lib/Option'
+import { notFoundError } from './error'
 import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
 import { PokemonSpecies } from './pokemon-species'
 
@@ -29,7 +30,7 @@ describe('getShakespearianPokemonDescription', () => {
     expect(species).toMatchObject(right(pokemonSpecies))
   })
 
-  it("returns an error string when the pokemon species doesn't exist", async () => {
+  it("returns a NotFoundError when the pokemon species doesn't exist", async () => {
     const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(none)
 
     const getDescriptionWithDependencies = getShakespearianPokemonDescription(
@@ -40,6 +41,6 @@ describe('getShakespearianPokemonDescription', () => {
 
     const [error] = lefts([species])
 
-    expect(error).toBe('No pokemon found')
+    expect(error).toMatchObject(notFoundError('No pokemon found'))
   })
 })
