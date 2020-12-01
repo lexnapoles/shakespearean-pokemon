@@ -1,15 +1,4 @@
-type FlavorText = {
-  flavorText: string
-  language: string
-}
-
-export type PokemonSpecies = {
-  id: number
-  name: string
-  flavorText: FlavorText
-}
-
-type GetPokemonSpeciesByName = (pokemonName: string) => Promise<PokemonSpecies>
+import { GetPokemonSpeciesByName, PokemonSpecies } from './pokemon-species'
 
 type GetShakespearianPokemonDescription = (
   getPokemonSpeciesByName: GetPokemonSpeciesByName

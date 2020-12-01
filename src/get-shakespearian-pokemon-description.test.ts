@@ -1,7 +1,5 @@
-import {
-  getShakespearianPokemonDescription,
-  PokemonSpecies,
-} from './get-shakespearian-pokemon-description'
+import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
+import { PokemonSpecies } from './pokemon-species'
 
 describe('getShakespearianPokemonDescription', () => {
   it('gets the pokemon species by name', async () => {
