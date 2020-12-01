@@ -1,8 +1,11 @@
+import { lefts } from 'fp-ts/lib/Array'
+import { right, fold } from 'fp-ts/lib/Either'
+import { none, some } from 'fp-ts/lib/Option'
 import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
 import { PokemonSpecies } from './pokemon-species'
 
 describe('getShakespearianPokemonDescription', () => {
-  it('gets the pokemon species by name', async () => {
+  it('returns the pokemon species by name', async () => {
     const pokemonName = 'charizard'
 
     const pokemonSpecies: PokemonSpecies = {
@@ -15,7 +18,7 @@ describe('getShakespearianPokemonDescription', () => {
       },
     }
 
-    const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(pokemonSpecies)
+    const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(some(pokemonSpecies))
 
     const getDescriptionWithDependencies = getShakespearianPokemonDescription(
       getPokemonSpeciesByName
@@ -23,6 +26,20 @@ describe('getShakespearianPokemonDescription', () => {
 
     const species = await getDescriptionWithDependencies(pokemonName)
 
-    expect(species).toMatchObject<PokemonSpecies>(pokemonSpecies)
+    expect(species).toMatchObject(right(pokemonSpecies))
+  })
+
+  it("returns an error string when the pokemon species doesn't exist", async () => {
+    const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(none)
+
+    const getDescriptionWithDependencies = getShakespearianPokemonDescription(
+      getPokemonSpeciesByName
+    )
+
+    const species = await getDescriptionWithDependencies('missingStr')
+
+    const [error] = lefts([species])
+
+    expect(error).toBe('No pokemon found')
   })
 })

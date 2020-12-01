@@ -1,13 +1,18 @@
+import { Either, fromOption } from 'fp-ts/lib/Either'
+import { pipe } from 'fp-ts/lib/function'
 import { GetPokemonSpeciesByName, PokemonSpecies } from './pokemon-species'
 
 type GetShakespearianPokemonDescription = (
   getPokemonSpeciesByName: GetPokemonSpeciesByName
-) => (pokemonName: string) => Promise<PokemonSpecies>
+) => (pokemonName: string) => Promise<Either<string, PokemonSpecies>>
 
 export const getShakespearianPokemonDescription: GetShakespearianPokemonDescription = (
   getPokemonSpeciesByName
 ) => async (pokemonName) => {
   const pokemonSpecies = await getPokemonSpeciesByName(pokemonName)
 
-  return pokemonSpecies
+  return pipe(
+    pokemonSpecies,
+    fromOption(() => 'No pokemon found')
+  )
 }
