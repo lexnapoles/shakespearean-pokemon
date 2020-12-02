@@ -1,5 +1,5 @@
-import { Either, fromOption } from 'fp-ts/lib/Either'
-import { pipe } from 'fp-ts/lib/function'
+import { Either, left, right } from 'fp-ts/lib/Either'
+import { isNone } from 'fp-ts/lib/Option'
 import { notFoundError, ApiError } from './error'
 import { GetPokemonSpeciesByName, PokemonSpecies } from './pokemon-species'
 import { GetShakespearianTranslation } from './shakespearian-translator'
@@ -12,7 +12,7 @@ type Dependencies = {
 type GetShakespearianPokemonDescription = ({
   getPokemonSpeciesByName,
   getShakespearianTranslation,
-}: Dependencies) => (pokemonName: string) => Promise<Either<ApiError, PokemonSpecies>>
+}: Dependencies) => (pokemonName: string) => Promise<Either<ApiError, string>>
 
 export const getShakespearianPokemonDescription: GetShakespearianPokemonDescription = ({
   getPokemonSpeciesByName,
@@ -20,8 +20,17 @@ export const getShakespearianPokemonDescription: GetShakespearianPokemonDescript
 }) => async (pokemonName) => {
   const pokemonSpecies = await getPokemonSpeciesByName(pokemonName)
 
-  return pipe(
-    pokemonSpecies,
-    fromOption(() => notFoundError('No pokemon found'))
-  )
+  if (isNone(pokemonSpecies)) {
+    return left(notFoundError('No pokemon found'))
+  }
+
+  const {
+    value: {
+      flavorText: { flavorText },
+    },
+  } = pokemonSpecies
+
+  const shakespearianTranslation = await getShakespearianTranslation(flavorText)
+
+  return right(shakespearianTranslation)
 }

@@ -8,7 +8,7 @@ import { PokemonSpecies } from './pokemon-species'
 const getShakespearianTranslation = (text: string) => Promise.resolve(text)
 
 describe('getShakespearianPokemonDescription', () => {
-  it('returns the pokemon species by name', async () => {
+  it.skip('returns the pokemon species by name', async () => {
     const pokemonName = 'charizard'
 
     const pokemonSpecies: PokemonSpecies = {
@@ -48,7 +48,7 @@ describe('getShakespearianPokemonDescription', () => {
     expect(error).toMatchObject(notFoundError('No pokemon found'))
   })
 
-  it.skip('returns a shakespearian version of the description', async () => {
+  it('returns a shakespearian version of the description', async () => {
     const pokemonName = 'charizard'
 
     const pokemonSpecies: PokemonSpecies = {
@@ -62,6 +62,10 @@ describe('getShakespearianPokemonDescription', () => {
     }
 
     const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(some(pokemonSpecies))
+    const getShakespearianTranslation = (_text: string) =>
+      Promise.resolve(
+        'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
+      )
 
     const getDescriptionWithDependencies = getShakespearianPokemonDescription({
       getPokemonSpeciesByName,
@@ -70,8 +74,10 @@ describe('getShakespearianPokemonDescription', () => {
 
     const shakespearianDescription = await getDescriptionWithDependencies(pokemonName)
 
-    expect(shakespearianDescription).toBe(
-      'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
+    expect(shakespearianDescription).toMatchObject(
+      right(
+        'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
+      )
     )
   })
 })
