@@ -25,9 +25,7 @@ export const getShakespearianPokemonDescription: GetShakespearianPokemonDescript
   }
 
   const {
-    value: {
-      flavorText: { flavorText },
-    },
+    value: { flavorText },
   } = pokemonSpecies
 
   const shakespearianTranslation = await getShakespearianTranslation(flavorText)

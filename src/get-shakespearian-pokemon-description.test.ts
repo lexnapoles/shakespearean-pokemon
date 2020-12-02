@@ -8,31 +8,6 @@ import { PokemonSpecies } from './pokemon-species'
 const getShakespearianTranslation = (text: string) => Promise.resolve(text)
 
 describe('getShakespearianPokemonDescription', () => {
-  it.skip('returns the pokemon species by name', async () => {
-    const pokemonName = 'charizard'
-
-    const pokemonSpecies: PokemonSpecies = {
-      id: 6,
-      name: pokemonName,
-      flavorText: {
-        flavorText:
-          'Spits fire that is hot enough to melt boulders.Known to cause forest fires unintentionally',
-        language: 'en',
-      },
-    }
-
-    const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(some(pokemonSpecies))
-
-    const getDescriptionWithDependencies = getShakespearianPokemonDescription({
-      getPokemonSpeciesByName,
-      getShakespearianTranslation,
-    })
-
-    const species = await getDescriptionWithDependencies(pokemonName)
-
-    expect(species).toMatchObject(right(pokemonSpecies))
-  })
-
   it("returns a NotFoundError when the pokemon species doesn't exist", async () => {
     const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(none)
 
@@ -54,11 +29,8 @@ describe('getShakespearianPokemonDescription', () => {
     const pokemonSpecies: PokemonSpecies = {
       id: 6,
       name: pokemonName,
-      flavorText: {
-        flavorText:
-          'Spits fire that is hot enough to melt boulders.Known to cause forest fires unintentionally',
-        language: 'en',
-      },
+      flavorText:
+        'Spits fire that is hot enough to melt boulders.Known to cause forest fires unintentionally',
     }
 
     const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(some(pokemonSpecies))
