@@ -1,6 +1,6 @@
 import { some } from 'fp-ts/lib/Option'
 import nock from 'nock'
-import { getPokemonSpeciesByName } from './pokemon-species'
+import { getPokemonSpeciesByName } from '.'
 
 describe('getPokemonSpeciesByName', () => {
   it('gets a pokemon species by name', async () => {

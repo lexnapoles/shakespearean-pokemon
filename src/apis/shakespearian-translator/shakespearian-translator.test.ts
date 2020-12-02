@@ -1,5 +1,5 @@
 import nock from 'nock'
-import { getShakespearianTranslation } from './shakespearian-translator'
+import { getShakespearianTranslation } from '.'
 
 describe('getShakespearianTranslation', () => {
   it('translates the text to a shakespeare version', async () => {

@@ -1,8 +1,8 @@
 import { Either, left, right } from 'fp-ts/lib/Either'
 import { isNone } from 'fp-ts/lib/Option'
+import { GetPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
+import { GetShakespearianTranslation } from './apis/shakespearian-translator'
 import { notFoundError, ApiError } from './error'
-import { GetPokemonSpeciesByName, PokemonSpecies } from './pokemon-species'
-import { GetShakespearianTranslation } from './shakespearian-translator'
 
 type Dependencies = {
   getPokemonSpeciesByName: GetPokemonSpeciesByName

@@ -1,9 +1,9 @@
 import { lefts } from 'fp-ts/lib/Array'
 import { right } from 'fp-ts/lib/Either'
 import { none, some } from 'fp-ts/lib/Option'
+import { PokemonSpecies } from './apis/pokemon-api/pokemon-species'
 import { notFoundError } from './error'
 import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
-import { PokemonSpecies } from './pokemon-species'
 
 const getShakespearianTranslation = (text: string) => Promise.resolve(text)
 
