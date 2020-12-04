@@ -1,5 +1,5 @@
 import got from 'got'
-import * as z from 'zod'
+import { shakespearianTranslationResponseSchema } from './shakespearianTranslationResponseSchema'
 
 export type GetShakespearianTranslation = (text: string) => Promise<string>
 
@@ -22,12 +22,3 @@ export const getShakespearianTranslation: GetShakespearianTranslation = async (t
 
   return translatedText
 }
-
-const shakespearianTranslationResponseSchema = z.object({
-  success: z.object({ total: z.literal(1) }),
-  contents: z.object({
-    translated: z.string(),
-    text: z.string(),
-    translation: z.literal('shakespeare'),
-  }),
-})
