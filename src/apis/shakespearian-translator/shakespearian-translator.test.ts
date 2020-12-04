@@ -4,7 +4,7 @@ import { getShakespearianTranslation } from '.'
 describe('getShakespearianTranslation', () => {
   it('translates the text to a shakespeare version', async () => {
     const originalText =
-      'Spits fire that is hot enough to melt boulders.Known to cause forest fires unintentionally'
+      'Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally'
 
     const stub = {
       success: {
@@ -14,7 +14,7 @@ describe('getShakespearianTranslation', () => {
         translated:
           'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally',
         text:
-          'Spits fire that is hot enough to melt boulders.Known to cause forest fires unintentionally',
+          'Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally',
         translation: 'shakespeare',
       },
     }
