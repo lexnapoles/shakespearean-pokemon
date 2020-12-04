@@ -1,6 +1,9 @@
-import { some } from 'fp-ts/lib/Option'
+import { left, right } from 'fp-ts/lib/Either'
+import { pipe } from 'fp-ts/lib/function'
 import nock from 'nock'
 import { getPokemonSpeciesByName } from '.'
+import { notFoundError } from '../../../error'
+import { clone } from '../../../utils/clone'
 
 describe('getPokemonSpeciesByName', () => {
   it('gets a pokemon species by name', async () => {
@@ -13,13 +16,46 @@ describe('getPokemonSpeciesByName', () => {
     const species = await getPokemonSpeciesByName(pokemonName)
 
     expect(species).toMatchObject(
-      some({
+      right({
         id: 413,
         name: pokemonName,
         flavorText:
-          'When BURMY evolved, its cloak\nbecame a part of this Pokémon’s\nbody. The cloak is never shed.',
+          'When BURMY evolved, its cloak became a part of this Pokémon’s body. The cloak is never shed.',
       })
     )
+  })
+
+  it('returns a not found error when the pokemon species is not found', async () => {
+    const pokemonName = 'wormadam'
+
+    nock('https://pokeapi.co/api/v2').get(`/pokemon-species/${pokemonName}`).reply(404)
+
+    const species = await getPokemonSpeciesByName(pokemonName)
+
+    expect(species).toMatchObject(left(notFoundError('Pokemon not found')))
+  })
+
+  it("returns a an error when there's no english text", async () => {
+    const pokemonName = 'wormadam'
+
+    const stubWithoutFlavorText = pipe(
+      pokemonSpeciesStub,
+      clone,
+      (obj) => (
+        (obj.flavor_text_entries = obj.flavor_text_entries.filter(
+          ({ language: { name } }: { language: { name: string } }) => name !== 'en'
+        )),
+        obj
+      )
+    )
+
+    nock('https://pokeapi.co/api/v2')
+      .get(`/pokemon-species/${pokemonName}`)
+      .reply(200, stubWithoutFlavorText)
+
+    const species = await getPokemonSpeciesByName(pokemonName)
+
+    expect(species).toMatchObject(left(notFoundError('No english text found')))
   })
 })
 

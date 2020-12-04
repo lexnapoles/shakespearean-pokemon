@@ -1,5 +1,4 @@
-import { Either, left, right } from 'fp-ts/lib/Either'
-import { isNone } from 'fp-ts/lib/Option'
+import { Either, isLeft, left, right } from 'fp-ts/lib/Either'
 import { GetPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
 import { GetShakespearianTranslation } from './apis/shakespearian-translator'
 import { notFoundError, ApiError } from './error'
@@ -20,15 +19,15 @@ export const getShakespearianPokemonDescription: GetShakespearianPokemonDescript
 }) => async (pokemonName) => {
   const pokemonSpecies = await getPokemonSpeciesByName(pokemonName)
 
-  if (isNone(pokemonSpecies)) {
-    return left(notFoundError('No pokemon found'))
+  if (isLeft(pokemonSpecies)) {
+    return pokemonSpecies
   }
 
   const {
-    value: { flavorText },
+    right: { flavorText },
   } = pokemonSpecies
 
-  const shakespearianTranslation = await getShakespearianTranslation(flavorText)
+  const shakespearianTranslation = await getShakespearianTranslation(flavorText.trim())
 
   return right(shakespearianTranslation)
 }

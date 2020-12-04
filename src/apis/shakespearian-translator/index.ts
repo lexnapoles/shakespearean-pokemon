@@ -8,7 +8,7 @@ const translationServiceUrl = 'https://api.funtranslations.com/translate/shakesp
 export const getShakespearianTranslation: GetShakespearianTranslation = async (text) => {
   const response = await got.get(translationServiceUrl, { searchParams: { text } }).json()
 
-  const parsedResponse = shakespearianTranslationResponse.safeParse(response)
+  const parsedResponse = shakespearianTranslationResponseSchema.safeParse(response)
 
   if (!parsedResponse.success) {
     return ''
@@ -23,7 +23,7 @@ export const getShakespearianTranslation: GetShakespearianTranslation = async (t
   return translatedText
 }
 
-const shakespearianTranslationResponse = z.object({
+const shakespearianTranslationResponseSchema = z.object({
   success: z.object({ total: z.literal(1) }),
   contents: z.object({
     translated: z.string(),
