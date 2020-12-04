@@ -1,7 +1,7 @@
-import { Either, isLeft, left, right } from 'fp-ts/lib/Either'
+import { Either, isLeft } from 'fp-ts/lib/Either'
 import { GetPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
 import { GetShakespearianTranslation } from './apis/shakespearian-translator'
-import { notFoundError, ApiError } from './error'
+import { ApiError } from './error'
 
 type Dependencies = {
   getPokemonSpeciesByName: GetPokemonSpeciesByName
@@ -29,5 +29,5 @@ export const getShakespearianPokemonDescription: GetShakespearianPokemonDescript
 
   const shakespearianTranslation = await getShakespearianTranslation(flavorText.trim())
 
-  return right(shakespearianTranslation)
+  return shakespearianTranslation
 }

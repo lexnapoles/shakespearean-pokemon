@@ -1,4 +1,4 @@
-export type ApiError = NotFoundError
+export type ApiError = NotFoundError | InternalError
 
 export type NotFoundError = {
   type: 'NotFoundError'
@@ -12,6 +12,22 @@ export function notFoundError(message: string): NotFoundError {
   }
 }
 
-export function isNotFound(error: ApiError): error is NotFoundError {
+export function isNotFoundError(error: ApiError): error is NotFoundError {
   return error.type === 'NotFoundError'
+}
+
+export type InternalError = {
+  type: 'InternalError'
+  message: string
+}
+
+export function internalError(message: string): InternalError {
+  return {
+    type: 'InternalError',
+    message,
+  }
+}
+
+export function isInternalError(error: ApiError): error is InternalError {
+  return error.type === 'InternalError'
 }

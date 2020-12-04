@@ -16,7 +16,9 @@ describe('getShakespearianPokemonDescription', () => {
     const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(right(pokemonSpecies))
     const getShakespearianTranslation = (_text: string) =>
       Promise.resolve(
-        'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
+        right(
+          'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
+        )
       )
 
     const getDescriptionWithDependencies = getShakespearianPokemonDescription({
