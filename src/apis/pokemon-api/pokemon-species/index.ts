@@ -1,5 +1,5 @@
 import { Either, right, left, chain, map, fromNullable, mapLeft } from 'fp-ts/lib/Either'
-import { pipe } from 'fp-ts/lib/function'
+import { flow, pipe } from 'fp-ts/lib/function'
 import got from 'got'
 import { ApiError, notFoundError } from '../../../error'
 import {
@@ -23,6 +23,12 @@ export const getPokemonSpeciesByName: GetPokemonSpeciesByName = async (pokemonNa
   try {
     const response = await got.get(`${pokemonApiUrl}/${pokemonSpeciesEndpoint(pokemonName)}`).json()
 
+    const toPokemonSpecies = (id: number) => (name: string) => (flavorText: string) => ({
+      id,
+      name,
+      flavorText,
+    })
+
     return pipe(
       response,
       parsePokemonSpeciesResponse,
@@ -31,12 +37,7 @@ export const getPokemonSpeciesByName: GetPokemonSpeciesByName = async (pokemonNa
         pipe(
           flavor_text_entries.find(isEnglishLanguage),
           fromNullable(notFoundError('No english text found')),
-          map(({ flavor_text }) => flavor_text.replace(/\s/g, ' ').trim()),
-          map((flavorText) => ({
-            id,
-            name,
-            flavorText,
-          }))
+          map(flow(({ flavor_text }) => flavor_text, trimFlavorText, toPokemonSpecies(id)(name)))
         )
       )
     )
@@ -56,4 +57,8 @@ const parsePokemonSpeciesResponse = (
   const parsedResponse = pokemonSpeciesResponseSchema.safeParse(response)
 
   return parsedResponse.success ? right(parsedResponse.data) : left('Parsing failed')
+}
+
+function trimFlavorText(flavorText: string) {
+  return flavorText.replace(/\s/g, ' ').trim()
 }
