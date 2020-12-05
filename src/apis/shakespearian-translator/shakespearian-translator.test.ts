@@ -26,7 +26,9 @@ describe('getShakespearianTranslation', () => {
       .query({ text: originalText })
       .reply(200, stub)
 
-    const translatedText = await getShakespearianTranslation(originalText)
+    const lazyGetTranslation = getShakespearianTranslation(originalText)
+
+    const translatedText = await lazyGetTranslation()
 
     expect(translatedText).toMatchObject(right(stub.contents.translated))
   })
@@ -40,7 +42,9 @@ describe('getShakespearianTranslation', () => {
       .query({ text: originalText })
       .reply(404)
 
-    const translatedText = await getShakespearianTranslation(originalText)
+    const lazyGetTranslation = getShakespearianTranslation(originalText)
+
+    const translatedText = await lazyGetTranslation()
 
     expect(translatedText).toMatchObject(
       left(internalError('Translation was not possible at the moment'))
@@ -68,7 +72,9 @@ describe('getShakespearianTranslation', () => {
       .query({ text: originalText })
       .reply(200, stub)
 
-    const translatedText = await getShakespearianTranslation(originalText)
+    const lazyGetTranslation = getShakespearianTranslation(originalText)
+
+    const translatedText = await lazyGetTranslation()
 
     expect(translatedText).toMatchObject(
       left(internalError('Translation was not possible at the moment'))

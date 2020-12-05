@@ -1,32 +1,37 @@
-import { Either, left, right } from 'fp-ts/lib/Either'
+import * as E from 'fp-ts/lib/Either'
+import { pipe } from 'fp-ts/lib/function'
+
+import * as TE from 'fp-ts/lib/TaskEither'
+
 import got from 'got'
 import { InternalError, internalError } from '../../error'
-import { shakespearianTranslationResponseSchema } from './shakespearianTranslationResponseSchema'
+import {
+  ShakespearianTranslationResponseSchema,
+  shakespearianTranslationResponseSchema,
+} from './shakespearianTranslationResponseSchema'
 
-export type GetShakespearianTranslation = (text: string) => Promise<Either<InternalError, string>>
+export type GetShakespearianTranslation = (text: string) => TE.TaskEither<InternalError, string>
 
 const translationServiceUrl = 'https://api.funtranslations.com/translate/shakespeare.json'
 
-export const getShakespearianTranslation: GetShakespearianTranslation = async (text) => {
-  try {
-    const response = await got.get(translationServiceUrl, { searchParams: { text } }).json()
+export const getShakespearianTranslation: GetShakespearianTranslation = (text) => {
+  return pipe(
+    TE.tryCatch(
+      () => got.get(translationServiceUrl, { searchParams: { text } }).json(),
+      (error) => `Translation was not possible at the moment: ${(error as Error).message}`
+    ),
+    TE.chainEitherKW(parseResponse),
+    TE.bimap(
+      (error) => internalError(error),
+      ({ contents: { translated: translatedText } }) => translatedText
+    )
+  )
+}
 
-    const parsedResponse = shakespearianTranslationResponseSchema.safeParse(response)
+const parseResponse = (
+  response: unknown
+): E.Either<string, ShakespearianTranslationResponseSchema> => {
+  const parsedResponse = shakespearianTranslationResponseSchema.safeParse(response)
 
-    if (!parsedResponse.success) {
-      return left(internalError('Translation was not possible at the moment'))
-    }
-
-    const {
-      data: {
-        contents: { translated: translatedText },
-      },
-    } = parsedResponse
-
-    return right(translatedText)
-  } catch (e) {
-    console.error(e)
-
-    return left(internalError('Translation was not possible at the moment'))
-  }
+  return parsedResponse.success ? E.right(parsedResponse.data) : E.left('Parsing failed')
 }

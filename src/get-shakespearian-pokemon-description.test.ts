@@ -1,4 +1,6 @@
-import { right } from 'fp-ts/lib/Either'
+import * as TE from 'fp-ts/lib/TaskEither'
+import * as E from 'fp-ts/lib/Either'
+
 import { PokemonSpecies } from './apis/pokemon-api/pokemon-species'
 import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
 
@@ -13,12 +15,10 @@ describe('getShakespearianPokemonDescription', () => {
         'Spits fire that is hot enough to melt boulders.Known to cause forest fires unintentionally',
     }
 
-    const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(right(pokemonSpecies))
+    const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(E.right(pokemonSpecies))
     const getShakespearianTranslation = (_text: string) =>
-      Promise.resolve(
-        right(
-          'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
-        )
+      TE.right(
+        'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
       )
 
     const getDescriptionWithDependencies = getShakespearianPokemonDescription({
@@ -29,7 +29,7 @@ describe('getShakespearianPokemonDescription', () => {
     const shakespearianDescription = await getDescriptionWithDependencies(pokemonName)
 
     expect(shakespearianDescription).toMatchObject(
-      right(
+      E.right(
         'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
       )
     )
