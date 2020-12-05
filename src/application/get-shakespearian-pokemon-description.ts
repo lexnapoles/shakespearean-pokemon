@@ -2,9 +2,9 @@ import { Either } from 'fp-ts/lib/Either'
 import * as TE from 'fp-ts/lib/TaskEither'
 
 import { flow, pipe } from 'fp-ts/lib/function'
-import { GetPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
-import { GetShakespearianTranslation } from './apis/shakespearian-translator'
-import { ApiError } from './error'
+import { GetPokemonSpeciesByName } from '../apis/pokemon-api/pokemon-species'
+import { GetShakespearianTranslation } from '../apis/shakespearian-translator'
+import { ApiError } from '../error'
 
 type Dependencies = {
   getPokemonSpeciesByName: GetPokemonSpeciesByName

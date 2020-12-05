@@ -5,7 +5,7 @@ import { pipe } from 'fp-ts/lib/function'
 import { getPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
 import { getShakespearianTranslation } from './apis/shakespearian-translator'
 import { ApiError, internalError } from './error'
-import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
+import { getShakespearianPokemonDescription } from './application/get-shakespearian-pokemon-description'
 
 dotenv.config()
 
