@@ -13,7 +13,9 @@ describe('getPokemonSpeciesByName', () => {
       .get(`/pokemon-species/${pokemonName}`)
       .reply(200, pokemonSpeciesStub)
 
-    const species = await getPokemonSpeciesByName(pokemonName)
+    const lazyFetchSpecies = getPokemonSpeciesByName(pokemonName)
+
+    const species = await lazyFetchSpecies()
 
     expect(species).toMatchObject(
       right({
@@ -30,9 +32,11 @@ describe('getPokemonSpeciesByName', () => {
 
     nock('https://pokeapi.co/api/v2').get(`/pokemon-species/${pokemonName}`).reply(404)
 
-    const species = await getPokemonSpeciesByName(pokemonName)
+    const lazyFetchSpecies = getPokemonSpeciesByName(pokemonName)
 
-    expect(species).toMatchObject(left(notFoundError('Pokemon not found')))
+    const species = await lazyFetchSpecies()
+
+    expect(species).toMatchObject(left(notFoundError('No pokemon found')))
   })
 
   it("returns a an error when there's no english text", async () => {
@@ -53,7 +57,9 @@ describe('getPokemonSpeciesByName', () => {
       .get(`/pokemon-species/${pokemonName}`)
       .reply(200, stubWithoutFlavorText)
 
-    const species = await getPokemonSpeciesByName(pokemonName)
+    const lazyFetchSpecies = getPokemonSpeciesByName(pokemonName)
+
+    const species = await lazyFetchSpecies()
 
     expect(species).toMatchObject(left(notFoundError('No english text found')))
   })

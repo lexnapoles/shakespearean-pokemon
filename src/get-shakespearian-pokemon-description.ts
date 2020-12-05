@@ -1,4 +1,7 @@
-import { Either, isLeft } from 'fp-ts/lib/Either'
+import { Either } from 'fp-ts/lib/Either'
+import * as TE from 'fp-ts/lib/TaskEither'
+
+import { flow, pipe } from 'fp-ts/lib/function'
 import { GetPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
 import { GetShakespearianTranslation } from './apis/shakespearian-translator'
 import { ApiError } from './error'
@@ -17,17 +20,10 @@ export const getShakespearianPokemonDescription: GetShakespearianPokemonDescript
   getPokemonSpeciesByName,
   getShakespearianTranslation,
 }) => async (pokemonName) => {
-  const pokemonSpecies = await getPokemonSpeciesByName(pokemonName)
+  const getDescription = pipe(
+    getPokemonSpeciesByName(pokemonName),
+    TE.chain(flow(({ flavorText }) => flavorText, getShakespearianTranslation))
+  )
 
-  if (isLeft(pokemonSpecies)) {
-    return pokemonSpecies
-  }
-
-  const {
-    right: { flavorText },
-  } = pokemonSpecies
-
-  const fetchTranslation = getShakespearianTranslation(flavorText)
-
-  return await fetchTranslation()
+  return await getDescription()
 }

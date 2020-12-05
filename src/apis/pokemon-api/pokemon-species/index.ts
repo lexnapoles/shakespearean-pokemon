@@ -1,4 +1,5 @@
-import { Either, right, left, chain, map, fromNullable, mapLeft } from 'fp-ts/lib/Either'
+import * as E from 'fp-ts/lib/Either'
+import * as TE from 'fp-ts/lib/TaskEither'
 import { flow, pipe } from 'fp-ts/lib/function'
 import got from 'got'
 import { ApiError, notFoundError } from '../../../error'
@@ -6,6 +7,7 @@ import {
   pokemonSpeciesResponseSchema,
   PokemonSpeciesResponseSchema,
 } from './pokemonSpeciesResponseSchema'
+import { trim } from '../../../utils/trim'
 
 export type PokemonSpecies = {
   id: number
@@ -15,36 +17,36 @@ export type PokemonSpecies = {
 
 export type GetPokemonSpeciesByName = (
   pokemonName: string
-) => Promise<Either<ApiError, PokemonSpecies>>
+) => TE.TaskEither<ApiError, PokemonSpecies>
 
 const pokemonApiUrl = 'https://pokeapi.co/api/v2'
 
-export const getPokemonSpeciesByName: GetPokemonSpeciesByName = async (pokemonName) => {
-  try {
-    const response = await got.get(`${pokemonApiUrl}/${pokemonSpeciesEndpoint(pokemonName)}`).json()
+export const getPokemonSpeciesByName: GetPokemonSpeciesByName = (pokemonName) => {
+  const toPokemonSpecies = (id: number) => (name: string) => (flavorText: string) => ({
+    id,
+    name,
+    flavorText,
+  })
 
-    const toPokemonSpecies = (id: number) => (name: string) => (flavorText: string) => ({
-      id,
-      name,
-      flavorText,
-    })
-
-    return pipe(
-      response,
-      parsePokemonSpeciesResponse,
-      mapLeft((_msg) => notFoundError('No pokemon found')),
-      chain(({ id, name, flavor_text_entries }) =>
-        pipe(
-          flavor_text_entries.find(isEnglishLanguage),
-          fromNullable(notFoundError('No english text found')),
-          map(flow(({ flavor_text }) => flavor_text, trimFlavorText, toPokemonSpecies(id)(name)))
+  return pipe(
+    TE.tryCatch(
+      () => got.get(`${pokemonApiUrl}/${pokemonSpeciesEndpoint(pokemonName)}`).json(),
+      () => notFoundError('No pokemon found')
+    ),
+    TE.chainEitherKW(
+      flow(
+        parsePokemonSpeciesResponse,
+        E.mapLeft(() => notFoundError('No pokemon found')),
+        E.chain(({ id, flavor_text_entries, name }) =>
+          pipe(
+            flavor_text_entries.find(isEnglishLanguage),
+            E.fromNullable(notFoundError('No english text found')),
+            E.map(flow(({ flavor_text }) => flavor_text, trim, toPokemonSpecies(id)(name)))
+          )
         )
       )
     )
-  } catch (e) {
-    console.error(e)
-    return left(notFoundError('Pokemon not found'))
-  }
+  )
 }
 
 const pokemonSpeciesEndpoint = (pokemonName: string) => `pokemon-species/${pokemonName}`
@@ -53,12 +55,8 @@ const isEnglishLanguage = ({ language: { name } }: { language: { name: string } 
 
 const parsePokemonSpeciesResponse = (
   response: unknown
-): Either<string, PokemonSpeciesResponseSchema> => {
+): E.Either<string, PokemonSpeciesResponseSchema> => {
   const parsedResponse = pokemonSpeciesResponseSchema.safeParse(response)
 
-  return parsedResponse.success ? right(parsedResponse.data) : left('Parsing failed')
-}
-
-function trimFlavorText(flavorText: string) {
-  return flavorText.replace(/\s/g, ' ').trim()
+  return parsedResponse.success ? E.right(parsedResponse.data) : E.left('Parsing failed')
 }

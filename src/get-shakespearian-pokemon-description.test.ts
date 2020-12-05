@@ -15,7 +15,7 @@ describe('getShakespearianPokemonDescription', () => {
         'Spits fire that is hot enough to melt boulders.Known to cause forest fires unintentionally',
     }
 
-    const getPokemonSpeciesByName = (_pokemon: string) => Promise.resolve(E.right(pokemonSpecies))
+    const getPokemonSpeciesByName = (_pokemon: string) => TE.right(pokemonSpecies)
     const getShakespearianTranslation = (_text: string) =>
       TE.right(
         'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
