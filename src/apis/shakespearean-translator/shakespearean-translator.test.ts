@@ -1,7 +1,7 @@
 import { left, right } from 'fp-ts/lib/Either'
 import nock from 'nock'
 import { getShakespeareanTranslation } from '.'
-import { internalError } from '../../error'
+import { internalError } from '../../common-types'
 
 describe('getShakespeareanTranslation', () => {
   it('translates the text to a shakespeare version', async () => {

@@ -2,12 +2,12 @@ import * as E from 'fp-ts/lib/Either'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { flow, pipe } from 'fp-ts/lib/function'
 import got from 'got'
-import { ApiError, notFoundError } from '../../../error'
 import {
   pokemonSpeciesResponseSchema,
   PokemonSpeciesResponseSchema,
 } from './pokemon-species-response-schema'
 import { trim } from '../../../utils/trim'
+import { ApiError, notFoundError } from '../../../common-types'
 
 export type PokemonSpecies = {
   id: number

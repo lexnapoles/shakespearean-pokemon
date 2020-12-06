@@ -4,7 +4,7 @@ import { flow, pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 
 import got from 'got'
-import { ApiError, internalError } from '../../error'
+import { ApiError, internalError } from '../../common-types'
 import {
   ShakespeareanTranslationResponseSchema,
   shakespeareanTranslationResponseSchema,
@@ -26,7 +26,8 @@ export const getShakespeareanTranslation: GetShakespeareanTranslation = (text) =
         E.mapLeft(() => internalError(`Translation was not possible at the moment`))
       )
     ),
-    TE.map(({ contents: { translated: translatedText } }) => translatedText)
+    TE.map(({ contents: { translated: translatedText } }) => translatedText),
+    TE.mapLeft((err) => (console.log(err), err))
   )
 }
 

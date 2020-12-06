@@ -2,7 +2,7 @@ import { left, right } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/function'
 import nock from 'nock'
 import { getPokemonSpeciesByName } from '.'
-import { notFoundError } from '../../../error'
+import { notFoundError } from '../../../common-types'
 import { clone } from '../../../utils/clone'
 
 describe('getPokemonSpeciesByName', () => {

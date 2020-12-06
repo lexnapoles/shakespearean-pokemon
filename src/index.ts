@@ -4,8 +4,8 @@ import { fold } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/function'
 import { getPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
 import { getShakespeareanTranslation } from './apis/shakespearean-translator'
-import { ApiError, internalError } from './error'
 import { getShakespeareanPokemonDescription } from './application/get-shakespearean-pokemon-description'
+import { ApiError, internalError, toShakespeareanPokemonDescriptionDto } from './common-types'
 
 dotenv.config()
 
@@ -41,7 +41,9 @@ app.get('/pokemon/:pokemonName', async (req, res) => {
 
     pipe(
       description,
-      fold(errorHandler, (description) => res.send(description))
+      fold(errorHandler, (description) =>
+        pipe(toShakespeareanPokemonDescriptionDto(pokemonName, description), res.send)
+      )
     )
   } catch (err) {
     res.status(500).send(internalError('Something unexpected happened, please try again later'))

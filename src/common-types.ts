@@ -1,3 +1,15 @@
+type ShakespeareanPokemonDescriptionDto = {
+  name: string
+  description: string
+}
+
+export function toShakespeareanPokemonDescriptionDto(
+  name: string,
+  description: string
+): ShakespeareanPokemonDescriptionDto {
+  return { name, description }
+}
+
 export type ApiError = NotFoundError | InternalError
 
 export type NotFoundError = {
