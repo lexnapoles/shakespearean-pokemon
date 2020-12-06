@@ -9,7 +9,7 @@ import { getShakespearianPokemonDescription } from './application/get-shakespear
 
 dotenv.config()
 
-const port = process.env.SERVER_PORT
+const port = process.env.SERVER_PORT ?? 3000
 
 const app = express()
 
