@@ -6,15 +6,15 @@ import * as TE from 'fp-ts/lib/TaskEither'
 import got from 'got'
 import { ApiError, internalError } from '../../error'
 import {
-  ShakespearianTranslationResponseSchema,
-  shakespearianTranslationResponseSchema,
-} from './shakespearianTranslationResponseSchema'
+  ShakespeareanTranslationResponseSchema,
+  shakespeareanTranslationResponseSchema,
+} from './shakespearean-translation-response-schema'
 
-export type GetShakespearianTranslation = (text: string) => TE.TaskEither<ApiError, string>
+export type GetShakespeareanTranslation = (text: string) => TE.TaskEither<ApiError, string>
 
 const translationServiceUrl = 'https://api.funtranslations.com/translate/shakespeare.json'
 
-export const getShakespearianTranslation: GetShakespearianTranslation = (text) => {
+export const getShakespeareanTranslation: GetShakespeareanTranslation = (text) => {
   return pipe(
     TE.tryCatch(
       () => got.get(translationServiceUrl, { searchParams: { text } }).json(),
@@ -32,8 +32,8 @@ export const getShakespearianTranslation: GetShakespearianTranslation = (text) =
 
 const parseResponse = (
   response: unknown
-): E.Either<string, ShakespearianTranslationResponseSchema> => {
-  const parsedResponse = shakespearianTranslationResponseSchema.safeParse(response)
+): E.Either<string, ShakespeareanTranslationResponseSchema> => {
+  const parsedResponse = shakespeareanTranslationResponseSchema.safeParse(response)
 
   return parsedResponse.success ? E.right(parsedResponse.data) : E.left('Parsing failed')
 }

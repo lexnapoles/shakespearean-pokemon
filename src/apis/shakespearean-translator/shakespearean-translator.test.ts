@@ -1,9 +1,9 @@
 import { left, right } from 'fp-ts/lib/Either'
 import nock from 'nock'
-import { getShakespearianTranslation } from '.'
+import { getShakespeareanTranslation } from '.'
 import { internalError } from '../../error'
 
-describe('getShakespearianTranslation', () => {
+describe('getShakespeareanTranslation', () => {
   it('translates the text to a shakespeare version', async () => {
     const originalText =
       'Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally'
@@ -26,7 +26,7 @@ describe('getShakespearianTranslation', () => {
       .query({ text: originalText })
       .reply(200, stub)
 
-    const lazyGetTranslation = getShakespearianTranslation(originalText)
+    const lazyGetTranslation = getShakespeareanTranslation(originalText)
 
     const translatedText = await lazyGetTranslation()
 
@@ -42,7 +42,7 @@ describe('getShakespearianTranslation', () => {
       .query({ text: originalText })
       .reply(404)
 
-    const lazyGetTranslation = getShakespearianTranslation(originalText)
+    const lazyGetTranslation = getShakespeareanTranslation(originalText)
 
     const translatedText = await lazyGetTranslation()
 
@@ -72,7 +72,7 @@ describe('getShakespearianTranslation', () => {
       .query({ text: originalText })
       .reply(200, stub)
 
-    const lazyGetTranslation = getShakespearianTranslation(originalText)
+    const lazyGetTranslation = getShakespeareanTranslation(originalText)
 
     const translatedText = await lazyGetTranslation()
 

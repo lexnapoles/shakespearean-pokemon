@@ -2,9 +2,9 @@ import * as TE from 'fp-ts/lib/TaskEither'
 import * as E from 'fp-ts/lib/Either'
 
 import { PokemonSpecies } from '../apis/pokemon-api/pokemon-species'
-import { getShakespearianPokemonDescription } from './get-shakespearian-pokemon-description'
+import { getShakespeareanPokemonDescription } from './get-shakespearean-pokemon-description'
 
-describe('getShakespearianPokemonDescription', () => {
+describe('getShakespeareanPokemonDescription', () => {
   it('returns a shakespearian version of the description', async () => {
     const pokemonName = 'charizard'
 
@@ -16,19 +16,19 @@ describe('getShakespearianPokemonDescription', () => {
     }
 
     const getPokemonSpeciesByName = (_pokemon: string) => TE.right(pokemonSpecies)
-    const getShakespearianTranslation = (_text: string) =>
+    const getShakespeareanTranslation = (_text: string) =>
       TE.right(
         'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
       )
 
-    const getDescriptionWithDependencies = getShakespearianPokemonDescription({
+    const getDescriptionWithDependencies = getShakespeareanPokemonDescription({
       getPokemonSpeciesByName,
-      getShakespearianTranslation,
+      getShakespeareanTranslation,
     })
 
-    const shakespearianDescription = await getDescriptionWithDependencies(pokemonName)
+    const shakespeareanDescription = await getDescriptionWithDependencies(pokemonName)
 
-    expect(shakespearianDescription).toMatchObject(
+    expect(shakespeareanDescription).toMatchObject(
       E.right(
         'Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally'
       )

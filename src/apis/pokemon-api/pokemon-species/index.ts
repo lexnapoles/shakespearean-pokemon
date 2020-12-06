@@ -6,7 +6,7 @@ import { ApiError, notFoundError } from '../../../error'
 import {
   pokemonSpeciesResponseSchema,
   PokemonSpeciesResponseSchema,
-} from './pokemonSpeciesResponseSchema'
+} from './pokemon-species-response-schema'
 import { trim } from '../../../utils/trim'
 
 export type PokemonSpecies = {

@@ -3,26 +3,26 @@ import * as TE from 'fp-ts/lib/TaskEither'
 
 import { flow, pipe } from 'fp-ts/lib/function'
 import { GetPokemonSpeciesByName } from '../apis/pokemon-api/pokemon-species'
-import { GetShakespearianTranslation } from '../apis/shakespearian-translator'
+import { GetShakespeareanTranslation } from '../apis/shakespearean-translator'
 import { ApiError } from '../error'
 
 type Dependencies = {
   getPokemonSpeciesByName: GetPokemonSpeciesByName
-  getShakespearianTranslation: GetShakespearianTranslation
+  getShakespeareanTranslation: GetShakespeareanTranslation
 }
 
-type GetShakespearianPokemonDescription = ({
+type GetShakespeareanPokemonDescription = ({
   getPokemonSpeciesByName,
-  getShakespearianTranslation,
+  getShakespeareanTranslation,
 }: Dependencies) => (pokemonName: string) => Promise<Either<ApiError, string>>
 
-export const getShakespearianPokemonDescription: GetShakespearianPokemonDescription = ({
+export const getShakespeareanPokemonDescription: GetShakespeareanPokemonDescription = ({
   getPokemonSpeciesByName,
-  getShakespearianTranslation,
+  getShakespeareanTranslation,
 }) => async (pokemonName) => {
   const getDescription = pipe(
     getPokemonSpeciesByName(pokemonName),
-    TE.chain(flow(({ flavorText }) => flavorText, getShakespearianTranslation))
+    TE.chain(flow(({ flavorText }) => flavorText, getShakespeareanTranslation))
   )
 
   return await getDescription()

@@ -3,9 +3,9 @@ import express from 'express'
 import { fold } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/function'
 import { getPokemonSpeciesByName } from './apis/pokemon-api/pokemon-species'
-import { getShakespearianTranslation } from './apis/shakespearian-translator'
+import { getShakespeareanTranslation } from './apis/shakespearean-translator'
 import { ApiError, internalError } from './error'
-import { getShakespearianPokemonDescription } from './application/get-shakespearian-pokemon-description'
+import { getShakespeareanPokemonDescription } from './application/get-shakespearean-pokemon-description'
 
 dotenv.config()
 
@@ -16,11 +16,11 @@ const app = express()
 app.get('/pokemon/:pokemonName', async (req, res) => {
   try {
     const dependencies = {
-      getShakespearianTranslation: getShakespearianTranslation,
+      getShakespeareanTranslation: getShakespeareanTranslation,
       getPokemonSpeciesByName: getPokemonSpeciesByName,
     }
 
-    const getShakespearianDescriptionWithDependencies = getShakespearianPokemonDescription(
+    const getShakespearianDescriptionWithDependencies = getShakespeareanPokemonDescription(
       dependencies
     )
 
