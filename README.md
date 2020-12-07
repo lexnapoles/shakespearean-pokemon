@@ -1,4 +1,4 @@
-# shakespearian-pokemon
+# shakespearean-pokemon
 
 ## Getting started
 
