@@ -42,10 +42,11 @@ app.get('/pokemon/:pokemonName', async (req, res) => {
     pipe(
       description,
       fold(errorHandler, (description) =>
-        pipe(toShakespeareanPokemonDescriptionDto(pokemonName, description), res.send)
+        res.send(toShakespeareanPokemonDescriptionDto(pokemonName, description))
       )
     )
   } catch (err) {
+    console.error(err)
     res.status(500).send(internalError('Something unexpected happened, please try again later'))
   }
 })

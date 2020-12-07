@@ -31,7 +31,7 @@ export const getPokemonSpeciesByName: GetPokemonSpeciesByName = (pokemonName) =>
   return pipe(
     TE.tryCatch(
       () => got.get(`${pokemonApiUrl}/${pokemonSpeciesEndpoint(pokemonName)}`).json(),
-      () => notFoundError('No pokemon found')
+      (err) => (console.error(err), notFoundError('No pokemon found'))
     ),
     TE.chainEitherKW(
       flow(

@@ -18,7 +18,7 @@ export const getShakespeareanTranslation: GetShakespeareanTranslation = (text) =
   return pipe(
     TE.tryCatch(
       () => got.get(translationServiceUrl, { searchParams: { text } }).json(),
-      () => internalError(`Translation was not possible at the moment`)
+      (err) => (console.error(err), internalError(`Translation was not possible at the moment`))
     ),
     TE.chainEitherKW(
       flow(
