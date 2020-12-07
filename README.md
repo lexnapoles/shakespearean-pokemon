@@ -6,6 +6,8 @@
 
 #### Installation
 
+This project is built in TypeScript and Nodejs. To develop locally, you'll need to have installed Nodejs 14.15.1 at least. Then install the dependencies with:
+
 `npm i`
 
 If you want to specify a different port than the default (3000), add an `.env` file to the root of the project with the `SERVER_PORT` variable, e.g:
